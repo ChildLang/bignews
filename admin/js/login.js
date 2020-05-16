@@ -12,7 +12,7 @@ $(function(){
         // console.log(123);
         $.ajax({
             type:'post',
-            url:'http://localhost:8080/api/v1/admin/user/login',
+            url:BigNew.user_login,
             data:$(this).serialize(),
             beforeSend:function(){
                 var flag = false;
