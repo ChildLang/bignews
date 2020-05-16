@@ -10,11 +10,22 @@ $(function(){
         headers:{
             'Authorization':window.localStorage.getItem('token')
         },
+        //
         success:function(reg){
             console.log(reg);
             $(".sider span i").html(reg.data.nickname);
             $('.sider .user_info img').attr('src',reg.data.userPic);
             $('.user_center_link img').attr('src',reg.data.userPic);
         }
+    })
+
+    /* 退出功能 
+    1.给退出按钮添加点击事件，
+    点击按钮后跳转到登录页面，
+    清空本地存储的token，
+    */
+    $('.user_center_link .logout').on('click',function(){
+        window.localStorage.removeItem('token');
+        window.location.href = './login.html';
     })
 })
