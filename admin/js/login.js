@@ -35,6 +35,7 @@ $(function(){
                 $('.modal-body p').text(reg.msg);
                 if(reg.code == 200){
                     $('#myModal').on('hidden.bs.modal', function (e) {
+                    window.localStorage.setItem('token',res.token)
                     window.location.href = './index.html';
                     })
                 }
