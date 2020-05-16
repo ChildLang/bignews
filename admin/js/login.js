@@ -24,16 +24,19 @@ $(function(){
                     }
                 })
                 if(flag){
-                    alert('用户名或密码不能为空！');
+                    // alert('用户名或密码不能为空！');
+                    $('#myModal').modal('show');
+                    $('.modal-body p').text('用户名或密码不能为空！');
                     return false;
                 }
             },
             success:function(reg){
+                $('#myModal').modal('show');
+                $('.modal-body p').text(reg.msg);
                 if(reg.code == 200){
-                    alert('登录成功');
+                    $('#myModal').on('hidden.bs.modal', function (e) {
                     window.location.href = './index.html';
-                }else{
-                    alert(reg.msg);
+                    })
                 }
             }
         })
