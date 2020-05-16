@@ -10,7 +10,13 @@ $(function(){
         headers:{
             'Authorization':window.localStorage.getItem('token')
         },
-        //
+        beforeSend:function(){
+            if(!window.localStorage.getItem('token')){
+                alert('请先登录');
+                window.location.href = './login.html';
+                return ;
+            }
+        },
         success:function(reg){
             console.log(reg);
             $(".sider span i").html(reg.data.nickname);
