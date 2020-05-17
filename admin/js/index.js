@@ -34,4 +34,20 @@ $(function(){
         window.localStorage.removeItem('token');
         window.location.href = './login.html';
     })
+
+    /* 左侧边栏点击动画 */
+    $('.level01').on('click',function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        //点击文章管理按钮下拉菜单显示
+        if($(this).index() == 1){
+            $('.level02').slideToggle(500);
+            $(this).find('b').toggleClass('rotate0')
+        }
+        $('.level02 li').eq(0).addClass('active').siblings().removeClass('active');
+    })
+    // 下拉菜单点击效果
+    $('.level02 li').on('click',function(){
+        $(this).addClass('active').siblings().removeClass('active');
+
+    })
 })
