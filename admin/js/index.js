@@ -18,7 +18,7 @@ $(function(){
             }
         },
         success:function(reg){
-            console.log(reg);
+            // console.log(reg);
             $(".sider span i").html(reg.data.nickname);
             $('.sider .user_info img').attr('src',reg.data.userPic);
             $('.user_center_link img').attr('src',reg.data.userPic);
