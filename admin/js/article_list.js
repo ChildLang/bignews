@@ -25,9 +25,12 @@ $(function(){
             success:function(res){
                 // console.log(res);
                 var htmlStr = template('articleList',res.data);
-                $('.table-striped tbody').html(htmlStr)
+                $('.table-striped tbody').html(htmlStr);
+                loadPagination(res.data.totalPage);
             }
         })
+
+        
     }
     getArticleList({
         key:$('#articleKey').val(),
@@ -51,16 +54,30 @@ $(function(){
         // console.log($('#selCategory').val());
         // console.log($('#selStatus').val());
     })
+
+    // 分页组件
+    function loadPagination(totalPages, visiblePages) {
+        //(1)先销毁上一次的分页数据
+        $('#pagination').twbsPagination('destroy');
+        //(2)加载分页插件
+        $('#pagination').twbsPagination({
+            totalPages: totalPages,
+            visiblePages: visiblePages||6,
+            first: '首页',
+            prev: '上一页',
+            next: '下一页',
+            last: '尾页',
+            initiateStartPageClick: false,
+            onPageClick: function (event, page) {
+                //如果点击的页数与当前页数不一致，则发送ajax请求
+                getArticleList({
+                    key:$('#articleKey').val(),
+                    type:$('#selCategory').val(),
+                    state:$('#selStatus').val(),
+                    page:page,
+                    perpage:7
+                })
+            }
+        });
+    };
 })
-
-
-// author: "管理员"
-// category: "爱生活"
-// categoryId: 1
-// content: "见智对美团点评的“分部估值法”持有保留意见，两种估值方法得到截然相反的估值结果，本质上是对外卖业务的价值评估分歧。"
-// cover: "http://localhost/https://wpimg.wallstcn.com/9778718c-e680-4cef-88ad-9b62f21043a8.jpg"
-// date: "2019-05-28"
-// id: 220
-// read: 533
-// state: "已发布"
-// title: "借美团点评发布最佳财报之际，我们讨论一下估值分歧 | 见智研究团队"
