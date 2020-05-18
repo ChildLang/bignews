@@ -37,62 +37,31 @@ $(function(){
         // 判断id文本框是否为空，
         // 不为空则发送编辑请求
         // 为空则发送新增请求
-        if($('.modal-body #recipient-id').val()){
-            // 编辑内容
-            $.ajax({
-                type:'post',
-                url:BigNew.category_edit,
-                headers:{
-                    'Authorization':window.localStorage.getItem('token')
-                },
-                data:$('#list_form').serialize(),
-                beforeSend:function(){
-                    var flag = false;
-                    $('#list_form input').each(function(index,val){
-                        if(!$.trim($(this).val())){
-                            flag = true;
-                        }
-                    })
-                    if(flag){
-                        alert('内容不能为空');
-                        return false;
+        var id = $('.modal-body #recipient-id').val();
+        $.ajax({
+            type:'post',
+            url:id?BigNew.category_edit:BigNew.category_add,
+            headers:{
+                'Authorization':window.localStorage.getItem('token')
+            },
+            data:$('#list_form').serialize(),
+            beforeSend:function(){
+                var flag = false;
+                $('.form-group input').each(function(index,val){
+                    if(!$.trim($(this).val())){
+                        flag = true;
                     }
-                },
-                success:function(res){
-                    console.log(res);
-                    if(res.code ==200){
-                        window.location.reload();
-                    }
+                })
+                if(flag){
+                    alert('内容不能为空');
+                    return false;
                 }
-            })
-        }else{
-            // 新增内容
-            
-            $.ajax({
-                type:'post',
-                url:BigNew.category_add,
-                headers:{
-                    'Authorization':window.localStorage.getItem('token')
-                },
-                data:$('#list_form').serialize(),
-                beforeSend:function(){
-                    var flag = false;
-                    $('.form-group input').each(function(index,val){
-                        if(!$.trim($(this).val())){
-                            flag = true;
-                        }
-                    })
-                    if(flag){
-                        alert('内容不能为空');
-                        return false;
-                    }
-                },
-                success:function(res){
-                    if(res.code ==201){
-                        window.location.reload();
-                    }
+            },
+            success:function(res){
+                if(res.code == 200 || res.code == 201){
+                    window.location.reload();
                 }
-            })
-        }
+            }
+        })
     })
 })
