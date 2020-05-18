@@ -24,7 +24,7 @@
                 <td>{{val.slug}}</td>
                 <td class="text-center">
                     <a href="javascript:void(0)" data-toggle="modal" class=" btn btn-info btn-xs"data-index="{{index}}">编辑</a>
-                    <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-xs" data-id="{{val.id}}">删除</a>
                 </td>
             </tr>
         {{/each}}
@@ -67,6 +67,7 @@
             </table>
         </div>
     </div>
+    <!-- 添加和编辑文章分类模态框 -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -90,10 +91,30 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-primary btn-primaryadd">确认</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- 确认删除模态框 -->
+    <div class="modal fade delmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>删除后不可恢复，请确认是否删除</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-primarydel">确认</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 </html>
