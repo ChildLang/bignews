@@ -14,54 +14,64 @@ $(function(){
     })
 
     // 封装请求获取文章的函数
-    function getArticleList(obj){
+    function getArticleList(myPage,callback){
         $.ajax({
             type:'get',
             url:BigNew.article_query,
             headers:{
                 'Authorization':window.localStorage.getItem('token')
             },
-            data:obj,
+            data:{
+                key:$('#articleKey').val(),
+                type:$('#selCategory').val(),
+                state:$('#selStatus').val(),
+                page:myPage||1,
+                perpage:7
+            },
             success:function(res){
                 // console.log(res);
-                var htmlStr = template('articleList',res.data);
-                $('.table-striped tbody').html(htmlStr);
-                loadPagination(res.data.totalPage);
+                if(res.code == 200){
+                    var htmlStr = template('articleList',res.data);
+                    $('.table-striped tbody').html(htmlStr);
+
+
+                    if(callback != null&&res.data.data.length != 0){
+                        $('#pagination').show().next().hide();
+                        callback(res);
+                    }else if(res.data.totalPage == 0){
+                        $('#pagination').hide().next().show();
+                    }
+
+                    if(res.data.data.length == 0&& res.data.totalPage!=0){
+                        // currentPage -=1;
+                        $('#pagination-demo').twbsPagination('changeTotalPages',res.data.totalPage,1);
+                    }
+                    
+                }
+                
             }
         })
-
-        
     }
-    getArticleList({
-        key:$('#articleKey').val(),
-        type:$('#selCategory').val(),
-        state:$('#selStatus').val(),
-        page:1,
-        perpage:7
-    })
 
-    // 给筛选按钮注册单击事件
+    /* 文章列表页面需要提交三次类似的请求，
+    1次页面加载完成之后|提交请求获取数据|加载分页器
+    2次点击筛选按钮时  |提交请求获取数据|更新分页器总页数
+    3次点击分页器按钮  |提交请求获取数据| */
+
+    // 1次页面加载完成之后|提交请求获取数据|加载分页器
+    getArticleList(1,loadpagination);
+    // 2次点击筛选按钮时  |提交请求获取数据|更新分页器总页数
     $('#btnSearch').on('click',function(e){
         e.preventDefault();
-        getArticleList({
-            key:$('#articleKey').val(),
-            type:$('#selCategory').val(),
-            state:$('#selStatus').val(),
-            page:1,
-            perpage:7
+        getArticleList(1,function(res){
+            $('#pagination').twbsPagination('changeTotalPages',res.data.totalPage,1);
         })
-        // console.log($('#articleKey').val());
-        // console.log($('#selCategory').val());
-        // console.log($('#selStatus').val());
     })
-
-    // 分页组件
-    function loadPagination(totalPages, visiblePages) {
-        //(1)先销毁上一次的分页数据
-        $('#pagination').twbsPagination('destroy');
+    // // 分页组件
+    function loadpagination(res, visiblePages) {
         //(2)加载分页插件
         $('#pagination').twbsPagination({
-            totalPages: totalPages,
+            totalPages: res.data.totalPage,
             visiblePages: visiblePages||6,
             first: '首页',
             prev: '上一页',
@@ -69,15 +79,11 @@ $(function(){
             last: '尾页',
             initiateStartPageClick: false,
             onPageClick: function (event, page) {
-                //如果点击的页数与当前页数不一致，则发送ajax请求
-                getArticleList({
-                    key:$('#articleKey').val(),
-                    type:$('#selCategory').val(),
-                    state:$('#selStatus').val(),
-                    page:page,
-                    perpage:7
-                })
+                    getArticleList(page);
             }
         });
     };
+
+
+    
 })
