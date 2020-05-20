@@ -13,6 +13,7 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <!--引入封装好的接口文件 -->
     <script src="./js/http.js"></script>
     <!-- 引入相对应的js文件 -->
@@ -68,6 +69,24 @@
             </div>
         </div>
     </div>
+    <div class="modal fade delmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>删除后不可恢复，请确认是否删除</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-primarydel">确认</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <script type="text/template" id="classList">
         <option value="">所有分类</option>
@@ -86,7 +105,7 @@
                 <td class="text-center">{{val.state}}</td>
                 <td class="text-center">
                     <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
-                    <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+                    <a  class="btn btn-danger btn-xs delete"  data-id="{{val.id}}" >删除</a>
                 </td>
             </tr>
         {{/each}}

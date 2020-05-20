@@ -26,10 +26,10 @@ $(function(){
                 type:$('#selCategory').val(),
                 state:$('#selStatus').val(),
                 page:myPage||1,
-                perpage:7
+                perpage:3
             },
             success:function(res){
-                // console.log(res);
+                console.log(res);
                 if(res.code == 200){
                     var htmlStr = template('articleList',res.data);
                     $('.table-striped tbody').html(htmlStr);
@@ -37,16 +37,15 @@ $(function(){
 
                     if(callback != null&&res.data.data.length != 0){
                         $('#pagination').show().next().hide();
-                        callback(res);
-                    }else if(res.data.totalPage == 0){
-                        $('#pagination').hide().next().show();
-                    }
+                        callback(res);}
+                    // }else if(res.data.totalPage == 0){
+                    //     $('#pagination').hide().next().show();
+                    // }
 
-                    if(res.data.data.length == 0&& res.data.totalPage!=0){
-                        // currentPage -=1;
-                        $('#pagination-demo').twbsPagination('changeTotalPages',res.data.totalPage,1);
+                    if(res.data.totalPage!=0&&res.data.data.length == 0){
+                        pages -=1;
+                        $('#pagination').twbsPagination('changeTotalPages',res.data.totalPage,pages);
                     }
-                    
                 }
                 
             }
@@ -80,10 +79,40 @@ $(function(){
             initiateStartPageClick: false,
             onPageClick: function (event, page) {
                     getArticleList(page);
+                    window.pages = page;
             }
         });
     };
 
 
-    
+    // 删除功能
+    // 1.1点击删除按钮，获取id，弹出模态框
+    // 1.2点击确认按钮，发送请求
+    // 1.3重新渲染数据
+    $('tbody').on('click','.btn-danger',function(){
+        // console.log(123);
+        window.id = $(this).data('id');
+        $('.delmodal').modal('show');
+    })
+    $('.btn-primarydel').on('click',function(){
+        $.ajax({
+            type:'post',
+            url:BigNew.article_delete,
+            data:{
+                id:id
+            },
+            headers:{
+                'Authorization':window.localStorage.getItem('token')
+            },
+            success:function(res){
+                if(res.code ==204){
+                    getArticleList(pages,function(res){
+                        $('#pagination-demo').twbsPagination('changeTotalPages', res.data.totalPage, pages)
+                    })
+                }
+                $('.delmodal').modal('hide');
+
+            }
+        })
+    })
 })
